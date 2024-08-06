@@ -74,13 +74,13 @@ curl -X GET "http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf"
 
 ```json
 {
-  "title": "Nuevo Producto",
-  "description": "Descripción del producto",
-  "code": "12345",
-  "price": 100.0,
+  "title": "Cleaner desirednumber",
+  "description": "Description Cleaner desirednumber",
+  "code": "CNR-desirednumber",
+  "price": integer number,
   "status": true,
-  "stock": 50,
-  "category": "Categoría",
+  "stock": integer number,
+  "category": "Laundry",
   "thumbnails": "url_de_imagen"
 }
 ```
@@ -88,14 +88,13 @@ curl -X GET "http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf"
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
-  "title": "Nuevo Producto",
-  "description": "Descripción del producto",
-  "code": "12345",
-  "price": 100.0,
+  "title": "Cleaner desirednumber",
+  "description": "Description Cleaner desirednumber",
+  "code": "CNR-desirednumber",
+  "price": integer number,
   "status": true,
-  "stock": 50,
-  "category": "Categoría",
-  "thumbnails": "url_de_imagen"
+  "stock": integer number,
+  "category": "Laundry",
 }' "http://localhost:8080/api/products"
 ```
 
@@ -108,14 +107,14 @@ curl -X POST -H "Content-Type: application/json" -d '{
 
 ```json
 {
-  "price": 120.0
+  "price": 120
 }
 ```
 - **Ejemplo de Uso:**
 
 ```bash
 curl -X PUT -H "Content-Type: application/json" -d '{
-  "price": 120.0
+  "price": 120
 }' "http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf"
 ```
 
