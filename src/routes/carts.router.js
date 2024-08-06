@@ -102,15 +102,15 @@ const configureCartsRouter = (io) => {
             if (!cart) {
                 return res.status(404).json({ msg: 'Cart not found' });
             }
-
+    
             for (const item of cart.products) {
                 const product = await productModel.findById(item.product);
                 if (product) {
                     product.stock += item.quantity;
                     await product.save();
+                    io.emit('productUpdated', product); // Emitir evento de actualización del producto
                 }
             }
-
             cart.products = [];
             await cart.save();
             io.emit('cartCleared'); // Emitir evento de carrito vaciado

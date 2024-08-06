@@ -9,14 +9,12 @@ router.get('/', async (req, res) => {
 
     let filter = {};
     if (query) {
-        filter = {
-            $or: [
-                { category: { $regex: query, $options: 'i' } },
-                { status: { $regex: query, $options: 'i' } },
-                { title: { $regex: query, $options: 'i' } },
-                { description: { $regex: query, $options: 'i' } }
-            ]
-        };
+        const queryParts = query.split('=');
+        if (queryParts.length === 2 && queryParts[0] === 'category') {
+            filter.category = { $regex: queryParts[1], $options: 'i' };
+        } else if (queryParts.length === 2 && queryParts[0] === 'status') {
+            filter.status = queryParts[1] === 'true';
+        }
     }
 
     const options = {

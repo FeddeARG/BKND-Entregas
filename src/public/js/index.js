@@ -206,8 +206,24 @@ function clearCart() {
     .then(cart => {
         console.log('Cart cleared:', cart);
         updateCartList(cart);
+        socket.emit('cartCleared');
+        // Emitir evento de actualización de productos después de vaciar el carrito
+        cart.products.forEach(item => {
+            socket.emit('productUpdated', item.product);
+        });
     })
     .catch(err => console.error('Error clearing cart:', err));
+}
+
+socket.on('productUpdated', (product) => {
+    updateProductStock(product._id, product.stock);
+});
+
+function updateProductStock(productId, newStock) {
+    const stockElement = document.getElementById(`stock-${productId}`);
+    if (stockElement) {
+        stockElement.textContent = newStock;
+    }
 }
 
 function fetchProducts(page = 1, limit = 10, sort = '', query = '') {
@@ -259,6 +275,13 @@ socket.on('productData', (data) => {
 socket.on('productUpdated', (product) => {
     updateProductStock(product._id, product.stock);
 });
+
+function updateProductStock(productId, newStock) {
+    const stockElement = document.getElementById(`stock-${productId}`);
+    if (stockElement) {
+        stockElement.textContent = newStock;
+    }
+}
 
 socket.on('cartUpdated', (cart) => {
     updateCartList(cart);
