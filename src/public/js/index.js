@@ -41,8 +41,8 @@ function addProductToList(product) {
                 <p class="card-text"><strong>Stock:</strong> <span id="stock-${product._id}">${product.stock}</span></p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <button class="btn btn-sm btn-primary" onclick="viewDetails('${product._id}')">Ver Detalles</button>
-                        <button class="btn btn-sm btn-danger" onclick="confirmRemoveProduct('${product._id}')">Eliminar</button>
+                        <button class="btn btn-sm btn-primary" onclick="viewDetails('${product._id}')">See more..</button>
+                        <button class="btn btn-sm btn-danger" onclick="confirmRemoveProduct('${product._id}')">Erase</button>
                         <button class="btn btn-sm btn-success" onclick="promptAddToCart('${product._id}')">Add to Cart</button>
                     </div>
                 </div>
