@@ -62,7 +62,7 @@ curl -X GET "http://localhost:8080/api/products?limit=5&page=1&sort=asc&query=ca
 - **Ejemplo de Uso:**
 
 ```bash
-curl -X GET "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
+curl -X GET "http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf"
 ```
 
 #### Crear un Nuevo Producto
@@ -116,7 +116,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
 ```bash
 curl -X PUT -H "Content-Type: application/json" -d '{
   "price": 120.0
-}' "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
+}' "http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf"
 ```
 
 #### Eliminar un Producto
@@ -127,7 +127,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{
 - **Ejemplo de Uso:**
 
 ```bash
-curl -X DELETE "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
+curl -X DELETE "http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf"
 ```
 
 ## 🛒 Carrito de Compras
@@ -160,7 +160,7 @@ curl -X GET "http://localhost:8080/api/carts"
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
   "quantity": 2
-}' "http://localhost:8080/api/carts/add/60c72b2f5f1b2c001c8d4c50"
+}' "http://localhost:8080/api/carts/add/66b1537cf0d705fa5595d5cf"
 ```
 
 ### Eliminar un Producto del Carrito
@@ -180,7 +180,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
   "quantity": 1
-}' "http://localhost:8080/api/carts/remove/60c72b2f5f1b2c001c8d4c50"
+}' "http://localhost:8080/api/carts/remove/66b1537cf0d705fa5595d5cf"
 ```
 
 ### Vaciar el Carrito
