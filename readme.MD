@@ -7,18 +7,18 @@ Este es un proyecto de Ecommerce construido con **Node.js**, **Express**, **Mong
 
 Para clonar este proyecto, sigue estos pasos:
 
-\`\`\`bash
+```bash
 git clone https://github.com/FeddeARG/BKND-Entregas.git
 cd nuevo-repositorio
-\`\`\`
+```
 
 ### 📦 Instalar Dependencias
 
 Una vez que hayas clonado el repositorio, necesitas instalar las dependencias necesarias. Ejecuta el siguiente comando:
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 Esto instalará todas las dependencias listadas en el archivo \`package.json\`.
 
@@ -26,9 +26,9 @@ Esto instalará todas las dependencias listadas en el archivo \`package.json\`.
 
 Para iniciar el servidor, simplemente ejecuta el siguiente comando:
 
-\`\`\`bash
+```bash
 npm start
-\`\`\`
+```
 
 El servidor se ejecutará en el puerto **8080** por defecto. Puedes acceder a la aplicación en tu navegador web en [http://localhost:8080](http://localhost:8080).
 
@@ -50,9 +50,9 @@ A continuación se presentan los endpoints disponibles en esta aplicación junto
   - \`query\`: Filtro para buscar productos por categoría o disponibilidad.
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X GET "http://localhost:8080/api/products?limit=5&page=1&sort=asc&query=category=Laundry"
-\`\`\`
+```
 
 #### Obtener un Producto por ID
 
@@ -61,9 +61,9 @@ curl -X GET "http://localhost:8080/api/products?limit=5&page=1&sort=asc&query=ca
 - **Descripción:** Obtiene un producto específico por su ID.
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X GET "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
-\`\`\`
+```
 
 #### Crear un Nuevo Producto
 
@@ -72,7 +72,7 @@ curl -X GET "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
 - **Descripción:** Crea un nuevo producto.
 - **Cuerpo de la Solicitud:**
 
-\`\`\`json
+```json
 {
   "title": "Nuevo Producto",
   "description": "Descripción del producto",
@@ -83,10 +83,10 @@ curl -X GET "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
   "category": "Categoría",
   "thumbnails": "url_de_imagen"
 }
-\`\`\`
+```
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X POST -H "Content-Type: application/json" -d '{
   "title": "Nuevo Producto",
   "description": "Descripción del producto",
@@ -97,7 +97,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
   "category": "Categoría",
   "thumbnails": "url_de_imagen"
 }' "http://localhost:8080/api/products"
-\`\`\`
+```
 
 #### Actualizar un Producto
 
@@ -106,18 +106,18 @@ curl -X POST -H "Content-Type: application/json" -d '{
 - **Descripción:** Actualiza un producto existente por su ID.
 - **Cuerpo de la Solicitud:**
 
-\`\`\`json
+```json
 {
   "price": 120.0
 }
-\`\`\`
+```
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X PUT -H "Content-Type: application/json" -d '{
   "price": 120.0
 }' "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
-\`\`\`
+```
 
 #### Eliminar un Producto
 
@@ -126,9 +126,9 @@ curl -X PUT -H "Content-Type: application/json" -d '{
 - **Descripción:** Elimina un producto por su ID.
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X DELETE "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
-\`\`\`
+```
 
 ## 🛒 Carrito de Compras
 
@@ -139,9 +139,9 @@ curl -X DELETE "http://localhost:8080/api/products/60c72b2f5f1b2c001c8d4c50"
 - **Descripción:** Obtiene el contenido del carrito de compras.
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X GET "http://localhost:8080/api/carts"
-\`\`\`
+```
 
 ### Agregar un Producto al Carrito
 
@@ -150,18 +150,18 @@ curl -X GET "http://localhost:8080/api/carts"
 - **Descripción:** Agrega un producto al carrito de compras.
 - **Cuerpo de la Solicitud:**
 
-\`\`\`json
+```json
 {
   "quantity": 2
 }
-\`\`\`
+```
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X POST -H "Content-Type: application/json" -d '{
   "quantity": 2
 }' "http://localhost:8080/api/carts/add/60c72b2f5f1b2c001c8d4c50"
-\`\`\`
+```
 
 ### Eliminar un Producto del Carrito
 
@@ -170,18 +170,18 @@ curl -X POST -H "Content-Type: application/json" -d '{
 - **Descripción:** Elimina una cantidad específica de un producto del carrito.
 - **Cuerpo de la Solicitud:**
 
-\`\`\`json
+```json
 {
   "quantity": 1
 }
-\`\`\`
+```
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X POST -H "Content-Type: application/json" -d '{
   "quantity": 1
 }' "http://localhost:8080/api/carts/remove/60c72b2f5f1b2c001c8d4c50"
-\`\`\`
+```
 
 ### Vaciar el Carrito
 
@@ -190,9 +190,9 @@ curl -X POST -H "Content-Type: application/json" -d '{
 - **Descripción:** Vacía todo el carrito de compras.
 - **Ejemplo de Uso:**
 
-\`\`\`bash
+```bash
 curl -X POST "http://localhost:8080/api/carts/clear"
-\`\`\`
+```
 
 ## 📝 Sobre el Proyecto
 
