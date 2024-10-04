@@ -1,0 +1,24 @@
+<!-- src/views/productDetails.hbs -->
+{{#*inline "title"}}Product Details{{/inline}}
+
+<div class="container mt-5">
+    <h1>Product Details</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{product.title}}</h5>
+            <p class="card-text">{{product.description}}</p>
+            <p class="card-text"><strong>Code:</strong> {{product.code}}</p>
+            <p class="card-text"><strong>Price:</strong> ${{product.price}}</p>
+            <p class="card-text"><strong>Stock:</strong> {{product.stock}}</p>
+            <p class="card-text"><strong>Category:</strong> {{product.category}}</p>
+            <p class="card-text"><strong>Thumbnails:</strong></p>
+            <ul>
+                {{#each product.thumbnails}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+            <button class="btn btn-success" onclick="addToCart('{{product._id}}')">Add to Cart</button>
+            <a href="/realtimeproducts" class="btn btn-secondary">Back to Products</a>
+        </div>
+    </div>
+</div>
