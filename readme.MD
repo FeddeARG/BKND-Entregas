@@ -240,10 +240,10 @@ Este proyecto de Ecommerce está diseñado para proporcionar una plataforma bás
 
 ## 🛠️ Funcionalidades Clave
 
-# Gestión de Productos: Crear, leer, actualizar y eliminar productos (para admin).
-# Gestión de Carritos: Agregar productos al carrito, eliminar productos del carrito y vaciar el carrito (para user).
-# Actualización en Tiempo Real: Los cambios en los productos y carritos se reflejan en tiempo real.
-# Paginación y Filtrado: Soporte para paginación, filtrado y ordenamiento de productos.
+ Gestión de Productos: Crear, leer, actualizar y eliminar productos (para admin).
+ Gestión de Carritos: Agregar productos al carrito, eliminar productos del carrito y vaciar el carrito (para user).
+ Actualización en Tiempo Real: Los cambios en los productos y carritos se reflejan en tiempo real.
+ Paginación y Filtrado: Soporte para paginación, filtrado y ordenamiento de productos.
 
 
 #### 🎉 ¡Muchas gracias por llegar hasta aquí! 🎉
