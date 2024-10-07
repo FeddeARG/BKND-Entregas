@@ -4,7 +4,6 @@ import crypto from "crypto";
 import nodemailer from "nodemailer";
 import twilio from "twilio";
 
-// Configuración de Nodemailer
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   port: 587,
@@ -14,10 +13,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Configuración de Twilio
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// Función de Login
 export const loginUser = async (req, res) => {
   try {
     const token = await UserService.login(req.body.email, req.body.password);
@@ -25,7 +22,7 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 5 * 60 * 60 * 1000, // 5 horas
+      maxAge: 5 * 60 * 60 * 1000,
     });
     res.redirect("/realtimeproducts");
   } catch (error) {
@@ -34,7 +31,6 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Función de Registro
 export const registerUser = async (req, res) => {
   try {
     const token = await UserService.register(req.body);
@@ -42,7 +38,7 @@ export const registerUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 5 * 60 * 60 * 1000, // 5 horas
+      maxAge: 5 * 60 * 60 * 1000,
     });
     res.redirect("/realtimeproducts");
   } catch (error) {
@@ -57,7 +53,7 @@ export const sendResetPassword = async (req, res) => {
     const user = await UserService.getUserByEmail(email);
 
     if (!user) {
-      return res.status(404).json({ message: "El usuario no fue encontrado." });
+      return res.status(404).render("requestResetPassword", { error: "El usuario no fue encontrado." });
     }
 
     const token = crypto.randomBytes(20).toString("hex");
@@ -75,78 +71,67 @@ export const sendResetPassword = async (req, res) => {
         from: process.env.EMAIL_USERNAME,
         subject: "Recuperación de contraseña",
         text: `Recibiste este correo porque solicitaste restablecer tu contraseña.\n\n
-              Haz clic en el siguiente enlace o pégalo en tu navegador para completar el proceso:\n\n
+              Por favor pega el enlace en tu navegador desde tu pc para completar el proceso:\n\n
               ${resetUrl}\n\n
               Si no solicitaste este correo, ignóralo.\n`,
       };
       await transporter.sendMail(mailOptions);
     } else if (method === "sms") {
       const smsOptions = {
-        body: `Haz clic en este enlace para restablecer tu contraseña: ${resetUrl}`,
+        body: `Por favor pega el enlace en tu navegador desde tu pc para completar el proceso: ${resetUrl}`,
         from: process.env.TWILIO_PHONE_NUMBER,
-        to: user.phone, // Asegúrate de que este número esté en formato internacional
+        to: user.phone,
       };
 
-      // Capturar el error de Twilio
       try {
         const message = await client.messages.create(smsOptions);
         console.log("Mensaje enviado correctamente:", message.sid);
       } catch (error) {
         console.error("Error al enviar SMS:", error);
-        return res.status(500).json({ message: "Error al enviar SMS", error });
+        return res.status(500).render("requestResetPassword", { error: "Error al enviar SMS." });
       }
     }
 
-    res.status(200).json({
-      message: "Se ha enviado un enlace de recuperación a tu correo electrónico o SMS.",
-    });
+    // Redirigimos a una vista de confirmación
+    res.render("resetConfirmation", { message: "Se ha enviado un enlace de recuperación a tu correo electrónico o SMS." });
   } catch (error) {
     console.error("Error al enviar el enlace de recuperación:", error);
-    res.status(500).json({ message: "Error al enviar el enlace de recuperación.", error });
+    res.status(500).render("requestResetPassword", { error: "Error al enviar el enlace de recuperación." });
   }
 };
-
 
 export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
     const { newPassword } = req.body;
 
-    // Verificar el token en la base de datos
     const user = await UserService.getUserByToken(token);
 
     if (!user) {
-      return res.status(400).json({
-        message: "El token es inválido o el usuario no fue encontrado.",
+      return res.status(400).render("resetPassword", {
+        error: "El token es inválido o el usuario no fue encontrado.",
       });
     }
 
-    // Verificar si el token ha expirado
     if (user.resetPasswordExpires < Date.now()) {
-      return res.status(400).json({
-        message: "El token ha expirado.",
+      return res.status(400).render("resetPassword", {
+        error: "El token ha expirado.",
       });
     }
 
-    // Actualizar la contraseña
-    const hashedPassword = await UserService.hashPassword(newPassword); // Hashear la nueva contraseña
+    const hashedPassword = await UserService.hashPassword(newPassword);
     user.password = hashedPassword;
 
-    // Limpiar los campos relacionados con el restablecimiento de contraseña
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
 
-    // Guardar el usuario actualizado
     await user.save();
 
-    res.status(200).json({ message: "La contraseña se ha restablecido correctamente." });
+    res.redirect("/auth/login?resetSuccess=true");
   } catch (error) {
-    console.error("Error en resetPassword:", error); // Registrar el error en la consola
-    res.status(500).json({
-      message: "Error al restablecer la contraseña.",
-      error,
+    console.error("Error en resetPassword:", error);
+    res.status(500).render("resetPassword", {
+      error: "Error al restablecer la contraseña.",
     });
   }
 };
-
-

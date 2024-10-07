@@ -11,11 +11,11 @@ router.post("/register", validateRegister, registerUser);
 
 // Ruta para mostrar la vista de selección de método de recuperación
 router.get("/reset-password", (req, res) => {
-  res.render("requestResetPassword");  // Esta es la nueva vista para elegir entre email o SMS
+  res.render("requestResetPassword");
 });
 
 // Ruta para procesar la solicitud de recuperación
-router.post("/reset-password", sendResetPassword);  // Procesa la solicitud del formulario y envía el enlace
+router.post("/reset-password", sendResetPassword);
 
 // Ruta para mostrar la vista de restablecimiento de contraseña con el token
 router.get("/reset-password/:token", (req, res) => {

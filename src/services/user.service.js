@@ -1,10 +1,9 @@
 //src/services/user.service.js
 import UserDAO from "../dao/user.dao.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"; // Para generar el token JWT
+import jwt from "jsonwebtoken";
 
 class UserService {
-  // Función de login
   async login(email, password) {
     const user = await UserDAO.getUserByEmail(email);
 
@@ -17,12 +16,11 @@ class UserService {
       throw new Error("Contraseña incorrecta");
     }
 
-    // Generar token JWT
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
       {
-        expiresIn: "5h", // Duración del token
+        expiresIn: "5h",
       }
     );
 
@@ -40,22 +38,18 @@ class UserService {
   async register(userData) {
     const { email, password, phone, ...otherData } = userData;
 
-    // Verificar si el correo ya existe
     const existingUser = await UserDAO.getUserByEmail(email);
     if (existingUser) {
       throw new Error("El correo electrónico ya está registrado");
     }
 
-    // Verificar si el teléfono ya está registrado
     const existingPhone = await UserDAO.getUserByPhone(phone);
     if (existingPhone) {
       throw new Error("El número de teléfono ya está registrado");
     }
 
-    // Hashear la contraseña
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    // Crear nuevo usuario
     const newUser = {
       email,
       password: hashedPassword,
@@ -65,9 +59,8 @@ class UserService {
 
     const createdUser = await UserDAO.createUser(newUser);
 
-    // Generar token JWT
     const token = jwt.sign({ id: createdUser._id, email: createdUser.email }, process.env.JWT_SECRET, {
-      expiresIn: "5h", // Token válido por 5 horas
+      expiresIn: "5h",
     });
 
     return token;
@@ -105,7 +98,7 @@ class UserService {
   }
 
   async hashPassword(password) {
-    return bcrypt.hashSync(password, 10); // Hashear la nueva contraseña
+    return bcrypt.hashSync(password, 10);
   }
 
   async getUserById(id) {
