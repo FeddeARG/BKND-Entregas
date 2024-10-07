@@ -5,6 +5,12 @@ import { validateLogin, validateRegister } from "../validators/auth.validator.js
 
 const router = Router();
 
+// Ruta para mostrar la vista de login y manejar la variable de éxito
+router.get("/login", (req, res) => {
+  const passwordResetSuccess = req.query.passwordResetSuccess === 'true';
+  res.render("login", { passwordResetSuccess });
+});
+
 // Rutas de login y registro
 router.post("/login", validateLogin, loginUser);
 router.post("/register", validateRegister, registerUser);
@@ -26,4 +32,5 @@ router.get("/reset-password/:token", (req, res) => {
 router.post("/reset-password/:token", resetPassword);
 
 export default router;
+
 

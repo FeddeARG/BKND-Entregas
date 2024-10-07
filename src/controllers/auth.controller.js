@@ -127,7 +127,8 @@ export const resetPassword = async (req, res) => {
 
     await user.save();
 
-    res.redirect("/auth/login?resetSuccess=true");
+    // Pasamos una variable de éxito al redirigir a la vista de login
+    res.render("login", { passwordResetSuccess: true });
   } catch (error) {
     console.error("Error en resetPassword:", error);
     res.status(500).render("resetPassword", {
