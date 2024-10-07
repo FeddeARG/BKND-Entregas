@@ -7,21 +7,22 @@ import { isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
+// Ruta para renderizar la vista de inicio (home)
 router.get("/", (req, res) => {
   res.render("home");
 });
 
+// Ruta para renderizar los productos en tiempo real y el carrito del usuario
 router.get(
   "/realtimeproducts",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // Si el rol del usuario es admin, redirige a la vista de admin
+
       if (req.user && req.user.role === "admin") {
         return res.redirect("/admin/products");
       }
 
-      // Si es un usuario regular, carga los productos y el carrito
       const products = await ProductDAO.getAllProducts();
       const cart = await CartDAO.getOrCreateCartByUserId(req.user._id);
 
@@ -33,7 +34,7 @@ router.get(
   }
 );
 
-
+// Ruta para renderizar la vista de administrador de productos (admin)
 router.get(
   "/admin/products",
   passport.authenticate("jwt", { session: false }),
@@ -49,9 +50,13 @@ router.get(
   }
 );
 
+// Ruta para renderizar la vista de login
 router.get("/auth/login", (req, res) => res.render("login"));
+
+// Ruta para renderizar la vista de registro
 router.get("/auth/register", (req, res) => res.render("register"));
 
+// Ruta para renderizar la vista del usuario actual (current)
 router.get(
   "/auth/current",
   passport.authenticate("jwt", { session: false }),
@@ -60,9 +65,11 @@ router.get(
   }
 );
 
+// Ruta para cerrar sesión (logout)
 router.get("/auth/logout", (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/auth/login");
 });
 
 export default router;
+

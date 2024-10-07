@@ -1,249 +1,118 @@
-# 🎉 Proyecto de Ecommerce 🎉
+# Backend2 Final - Ecommerce
 
-Este es un proyecto de Ecommerce construido con **Node.js**, **Express**, **MongoDB**, y **Handlebars**. El objetivo de este proyecto es proporcionar una plataforma básica de comercio electrónico que permita a los usuarios gestionar productos y carritos de compra en tiempo real. Incluye funcionalidades de recuperación de contraseña mediante email o SMS.
+Este proyecto es una aplicación **ecommerce** desarrollada con **Node.js**, **Express**, **MongoDB**, **HBS** y **Passport.js** para la autenticación. El sistema permite a los usuarios registrarse, agregar productos a su carrito de compras, y realizar compras. Los administradores pueden gestionar productos en el sistema (crear, editar y eliminar).
 
-## 🚀 Clonar el Proyecto
+## Requisitos
 
-Para clonar este proyecto, sigue estos pasos:
+- Node.js v14+ o superior
+- MongoDB
+
+## Instalación
+
+1. Clonar este repositorio o descargar los archivos del proyecto.
 
 ```bash
-git clone https://github.com/FeddeARG/BKND-Entregas.git
-cd nuevo-repositorio
+git clone <url_del_repositorio>
 ```
 
-### 📦 Instalar Dependencias
-
-Una vez que hayas clonado el repositorio, necesitas instalar las dependencias necesarias. Ejecuta el siguiente comando:
+2. Instalar las dependencias del proyecto.
 
 ```bash
 npm install
 ```
-Esto instalará todas las dependencias listadas en el archivo \`package.json\`.
 
+3. Configurar las variables de entorno.
 
-### ▶️ Iniciar el Proyecto
+   Las variables de entorno necesarias están proporcionadas en un archivo `.zip` junto con el link de entrega. Coloca el archivo **`.env.development`** y **`.env.production`** en la raíz del proyecto. Estas variables incluyen las credenciales de Twilio, Nodemailer, MongoDB y otras necesarias para el correcto funcionamiento del sistema.
 
-Para iniciar el servidor, simplemente ejecuta el siguiente comando:
-
-```bash
-npm start // para modo development
-npm start:prod // para modo production
-```
-El servidor se ejecutará en el puerto **8080** por defecto en development y en el puerto **3030** en el caso de encontrarse en production. Puedes acceder a la aplicación en tu navegador web en [http://localhost:8080](http://localhost:8080) o 3030 respectivamente.
-
-
-# ⚙️ Datos para Testeo
-```bash
-Admin:
-Email: federicoanaranjo@gmail.com
-Contraseña: admin3
-User:
-Email: user@gmail.com
-Contraseña: user
-```
-
-Los usuarios que se registren tendrán el rol por defecto de user. El rol admin tiene acceso exclusivo a la gestión de productos.
-
-# 🛠️ Funcionalidades Clave
-
-## Roles de Usuario
-
-Admin: Puede realizar un CRUD completo de productos (crear, leer, actualizar, eliminar).
-
-User: Puede agregar productos al carrito, visualizar su carrito, y recuperar su contraseña mediante email o SMS.
-
-
-## Recuperación de Contraseña
-
-Los usuarios pueden recuperar su contraseña usando el email o mediante SMS.
-El SMS debe abrirse desde la computadora, ya que el enlace apunta a localhost.
-🔑 Autenticación y Registro
-Cualquiera puede registrarse como usuario. El rol por defecto es user, con acceso limitado a las funcionalidades de carrito y recuperación de contraseña. Solo los administradores pueden gestionar productos.
-
-
-# 📡 Endpoints
-
-Autenticación
-Registro de Usuarios
-
-Endpoint: /auth/register
-Método: POST
-Descripción: Registra un nuevo usuario. El campo role por defecto será user.
+4. Ejecutar el proyecto en modo desarrollo.
 
 ```bash
-curl -X POST http://localhost:8080/auth/register \
--H 'Content-Type: application/json' \
--d '{
-  "first_name": "Nombre",
-  "last_name": "Apellido",
-  "age": 30,
-  "email": "user@example.com",
-  "phone": "+5491159546666",
-  "password": "password"
-}'
+npm start
 ```
 
-## Iniciar Sesión
-
-Endpoint: /auth/login
-Método: POST
-Descripción: Permite a un usuario autenticarse. Se genera un token JWT para el acceso.
+5. Para ejecutar en producción:
 
 ```bash
-curl -X POST http://localhost:8080/auth/login \
--H 'Content-Type: application/json' \
--d '{
-  "email": "user@example.com",
-  "password": "password"
-}'
+npm run start:prod
 ```
 
-## Recuperación de Contraseña (Email/SMS)
+## Funcionalidades
 
-Endpoint: /auth/reset-password
-Método: POST
-Descripción: Permite al usuario elegir si desea recuperar su contraseña por email o SMS.
+### 1. Registro y Autenticación
 
-```bash
-curl -X POST http://localhost:8080/auth/reset-password \
--H 'Content-Type: application/json' \
--d '{
-  "email": "user@example.com",
-  "method": "email"
-}'
-```
+Los usuarios pueden registrarse y autenticarse utilizando su correo electrónico y contraseña.
 
-## Restablecer Contraseña
+- **Ruta de Registro**: `/auth/register`
+- **Ruta de Login**: `/auth/login`
 
-Endpoint: /auth/reset-password/:token
-Método: POST
-Descripción: Restablece la contraseña usando el token proporcionado por email o SMS.
+Una vez registrados y autenticados, el usuario puede acceder a las funcionalidades del ecommerce.
 
-```bash
-curl -X POST http://localhost:8080/auth/reset-password/<token> \
--H 'Content-Type: application/json' \
--d '{
-  "newPassword": "nuevaPassword"
-}'
-```
+### 2. Carrito de Compras
 
-## Productos
+- Los **usuarios** pueden agregar productos a su carrito de compras.
+- Los productos se pueden **añadir**, **remover** o **vaciar** del carrito.
+- El carrito se actualiza en tiempo real y se almacena en la base de datos.
 
-Obtener Todos los Productos
+- **Rutas de Carrito**:
+  - Agregar producto: `POST /api/carts/add/:productId`
+  - Remover producto: `POST /api/carts/remove/:productId`
+  - Vaciar carrito: `POST /api/carts/clear`
+  - Comprar carrito: `POST /api/carts/purchase`
 
-Endpoint: /api/products
-Método: GET
-Descripción: Obtiene una lista de todos los productos con paginación, filtrado y ordenamiento opcional.
+### 3. Realización de Compras
 
-```bash
-curl -X GET "http://localhost:8080/api/products?limit=5&page=1&sort=asc&query=category=Laundry"
-```
+- Los usuarios pueden completar su compra mediante la opción de "Comprar Carrito".
+- Al realizar la compra, se genera un **ticket** de compra que se envía al correo electrónico del usuario. Este ticket incluye los detalles de la transacción.
+- **Ruta de Compra**: `/api/carts/purchase`
 
-## Crear Producto (Admin)
+### 4. Gestión de Productos (Administradores)
 
-Endpoint: /api/products
-Método: POST
-Descripción: Crea un nuevo producto (solo accesible para admins).
+Los **administradores** tienen permisos adicionales que les permiten gestionar los productos del ecommerce.
 
-```bash
-curl -X POST http://localhost:8080/api/products \
--H 'Content-Type: application/json' \
--d '{
-  "title": "Nuevo Producto",
-  "description": "Descripción del producto",
-  "code": "PROD001",
-  "price": 1500,
-  "stock": 100,
-  "category": "Electronics",
-  "thumbnails": ["url_de_imagen"]
-}'
-```
+- **Crear**, **editar**, **eliminar** productos.
+- Solo los usuarios con rol **admin** pueden acceder a las funcionalidades de gestión de productos.
 
-## Actualizar Producto (Admin)
+- **Rutas de Productos**:
+  - Obtener todos los productos: `GET /api/products`
+  - Obtener producto por ID: `GET /api/products/:id`
+  - Crear producto: `POST /api/products`
+  - Actualizar producto: `PUT /api/products/:id`
+  - Eliminar producto: `DELETE /api/products/:id`
 
-Endpoint: /api/products/:pid
-Método: PUT
-Descripción: Actualiza un producto existente por su ID.
+### 5. Recuperación de Contraseña
 
-```bash
-curl -X PUT http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf \
--H 'Content-Type: application/json' \
--d '{
-  "price": 120
-}'
-```
+- Los usuarios pueden recuperar su contraseña mediante un enlace que se envía a su correo electrónico.
+- **Ruta para solicitar recuperación de contraseña**: `/auth/reset-password`
+- **Ruta para restablecer la contraseña**: `/auth/reset-password/:token`
 
-## Eliminar Producto (Admin)
+### 6. Autenticación y Autorización
 
-Endpoint: /api/products/:pid
-Método: DELETE
-Descripción: Elimina un producto por su ID.
+El sistema utiliza **JWT** para la autenticación de los usuarios y el manejo de sesiones.
 
-```bash
-curl -X DELETE http://localhost:8080/api/products/66b1537cf0d705fa5595d5cf
-```
+- **JWT** se utiliza para verificar la identidad del usuario en cada solicitud.
+- Los administradores son identificados por su rol y tienen acceso a más funcionalidades.
 
-### Carrito
+### 7. Vistas
 
-# Ver el Carrito
+- **Productos en Tiempo Real**: Los usuarios pueden ver los productos en tiempo real y agregar productos a su carrito.
+  - **Ruta**: `/realtimeproducts`
+- **Vista de Administrador**: Los administradores pueden gestionar los productos.
+  - **Ruta**: `/admin/products`
 
-Endpoint: /api/carts
-Método: GET
-Descripción: Obtiene el contenido del carrito de compras.
+## Diferencias entre Usuarios y Administradores
 
-```bash
-curl -X GET http://localhost:8080/api/carts
-```
+- **Usuarios regulares**:
+  - Pueden registrarse, iniciar sesión, ver productos, agregar productos a su carrito y realizar compras.
+  
+- **Administradores**:
+  - Tienen permisos adicionales para crear, actualizar y eliminar productos. Pueden acceder a un panel de administración donde gestionan los productos.
 
-# Agregar Producto al Carrito
+## Ejemplo de Flujo de Usuario
 
-Endpoint: /api/carts/add/:pid
-Método: POST
-Descripción: Agrega un producto al carrito de compras.
-
-```bash
-curl -X POST http://localhost:8080/api/carts/add/66b1537cf0d705fa5595d5cf \
--H 'Content-Type: application/json' \
--d '{
-  "quantity": 2
-}'
-```
-
-# Eliminar Producto del Carrito
-
-Endpoint: /api/carts/remove/:pid
-Método: POST
-Descripción: Elimina una cantidad específica de un producto del carrito.
-
-```bash
-curl -X POST http://localhost:8080/api/carts/remove/66b1537cf0d705fa5595d5cf \
--H 'Content-Type: application/json' \
--d '{
-  "quantity": 1
-}'
-```
-
-# Vaciar Carrito
-
-Endpoint: /api/carts/clear
-Método: POST
-Descripción: Vacía todo el carrito de compras.
-
-```bash
-curl -X POST http://localhost:8080/api/carts/clear
-```
-
-## 📝 Sobre el Proyecto
-
-Este proyecto de Ecommerce está diseñado para proporcionar una plataforma básica donde los usuarios pueden gestionar productos en sus carritos de compra y un administrador puede controlar la relación entre productos y base de datos. Utiliza Node.js y Express, y muchas otras librerías que se pueden apreciar en el package.json
-
-
-## 🛠️ Funcionalidades Clave
-
- Gestión de Productos: Crear, leer, actualizar y eliminar productos (para admin).
- Gestión de Carritos: Agregar productos al carrito, eliminar productos del carrito y vaciar el carrito (para user).
- Actualización en Tiempo Real: Los cambios en los productos y carritos se reflejan en tiempo real.
- Paginación y Filtrado: Soporte para paginación, filtrado y ordenamiento de productos.
-
-
-#### 🎉 ¡Muchas gracias por llegar hasta aquí! 🎉
+1. **Registro**: El usuario accede a la ruta `/auth/register` y se registra con su correo electrónico y contraseña.
+2. **Login**: Luego de registrarse, el usuario inicia sesión en `/auth/login`.
+3. **Explorar Productos**: Una vez autenticado, el usuario puede explorar los productos disponibles en `/realtimeproducts`.
+4. **Agregar Productos al Carrito**: El usuario selecciona productos y los agrega a su carrito.
+5. **Comprar Carrito**: Al finalizar la selección, el usuario procede a comprar el carrito en la misma vista.
+6. **Ticket de Compra**: Después de la compra, el usuario recibe un ticket en su correo electrónico con los detalles de la transacción.

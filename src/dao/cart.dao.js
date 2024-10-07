@@ -1,6 +1,5 @@
 //src/dao/cart.dao.js
 import cartModel from "../models/cart.model.js";
-
 class CartDAO {
   async createCart(userId) {
     return await cartModel.create({ user: userId, products: [] });
@@ -61,11 +60,17 @@ class CartDAO {
   async clearCart(userId) {
     const cart = await this.getCartByUserId(userId);
     if (cart) {
+      console.log("Carrito encontrado, vaciando productos para el usuario:", userId);
       cart.products = [];
-      return await cart.save();
+      const savedCart = await cart.save();
+      console.log("Carrito vaciado y guardado:", savedCart);
+      return savedCart;
+    } else {
+      console.log("No se encontró carrito para el usuario:", userId);
     }
     return null;
   }
 }
 
 export default new CartDAO();
+

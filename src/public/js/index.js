@@ -114,6 +114,42 @@ function addToCart(productId, maxQuantity) {
   });
 }
 
+async function purchaseCart() {
+  try {
+    const response = await fetch("/api/carts/purchase", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      Swal.fire({
+        icon: "success",
+        title: "¡Compra Exitosa!",
+        text: result.message,
+        confirmButtonText: 'OK'
+      }).then(() => {
+        document.getElementById('cart-items').innerHTML = '';
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error en la compra",
+        text: result.message,
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Hubo un error al procesar la compra.",
+    });
+  }
+}
+
 function clearCart() {
   fetch("/api/carts/clear", {
     method: "POST",
