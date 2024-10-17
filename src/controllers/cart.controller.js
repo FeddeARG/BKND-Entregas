@@ -87,6 +87,14 @@ class CartController {
         purchaser: userEmail,
       });
 
+      const productRows = cart.products.map(item => `
+        <tr>
+          <td style="border: 1px solid #ddd; padding: 8px;">${item.product.title}</td>
+          <td style="border: 1px solid #ddd; padding: 8px;">${item.quantity}</td>
+          <td style="border: 1px solid #ddd; padding: 8px;">$${item.product.price.toFixed(2)}</td>
+        </tr>
+      `).join('');
+
       const htmlContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
           <h2 style="color: #4CAF50;">¡Gracias por tu compra!</h2>
@@ -109,6 +117,21 @@ class CartController {
               <td style="border: 1px solid #ddd; padding: 8px;">${ticket.purchaser}</td>
             </tr>
           </table>
+
+          <h3>Detalles de los productos comprados:</h3>
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <thead>
+              <tr>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Producto</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Cantidad</th>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Precio</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${productRows}
+            </tbody>
+          </table>
+
           <p style="color: #777;">Si tienes alguna duda, no dudes en contactarnos.</p>
           <p>Atentamente,<br>Tu tienda online</p>
         </div>
@@ -123,9 +146,7 @@ class CartController {
 
       await transporter.sendMail(mailOptions);
 
-      console.log("Vaciar carrito del usuario:", req.user._id);
       await CartService.clearCart(req.user._id);
-      console.log("Carrito vaciado correctamente.");
 
       res.status(200).json({ status: "success", message: "Compra realizada con éxito y ticket enviado por correo." });
     } catch (error) {
