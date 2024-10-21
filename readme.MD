@@ -12,7 +12,7 @@ Este proyecto es una aplicación **ecommerce** desarrollada con **Node.js**, **E
 1. Clonar este repositorio o descargar los archivos del proyecto.
 
 ```bash
-git clone <url_del_repositorio>
+git clone https://github.com/FeddeARG/BKND-Entregas.git
 ```
 
 2. Instalar las dependencias del proyecto.
