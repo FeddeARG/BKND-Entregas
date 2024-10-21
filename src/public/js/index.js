@@ -78,20 +78,22 @@ function addToCart(productId, maxQuantity) {
     confirmButtonText: "Agregar",
     cancelButtonText: "Cancelar",
     inputValidator: (value) => {
-      if (!value || value < 1 || value > maxQuantity) {
-        return `Ingrese una cantidad entre 1 y ${maxQuantity}`;
+      // Validación del valor antes de enviar
+      if (!value || isNaN(value) || value < 1 || value > maxQuantity) {
+        return `Ingrese una cantidad válida entre 1 y ${maxQuantity}`;
       }
     },
   }).then((result) => {
     if (result.isConfirmed) {
-      const quantity = parseInt(result.value);
+      const quantity = parseInt(result.value);  // Asegurarse de que es un número entero
+      console.log("Producto ID enviado:", productId);
       fetch(`/api/carts/add/${productId}`, {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ quantity }),
+        body: JSON.stringify({ quantity }),  // Enviar como número
       })
         .then((response) => {
           if (response.ok) {

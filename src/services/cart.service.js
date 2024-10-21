@@ -1,6 +1,7 @@
 //src/services/cart.service.js
 import CartDAO from "../dao/cart.dao.js";
 import ProductDAO from "../dao/product.dao.js";
+import { AddProductToCartDTO } from "../dto/cart.dto.js";
 
 class CartService {
   async getOrCreateCartByUserId(userId) {
@@ -8,12 +9,13 @@ class CartService {
   }
 
   async addProductToCart(userId, productId, quantity) {
-    if (quantity <= 0) {
-      throw new Error("La cantidad debe ser mayor a cero");
-    }
+    console.log("Product ID recibido en servicio:", productId);  // Debug para ver el ID
 
     const product = await ProductDAO.getProductById(productId);
+
+    // Verificar si se encuentra el producto
     if (!product) {
+      console.error("Producto no encontrado con el ID:", productId);
       throw new Error("Producto no encontrado");
     }
 
@@ -55,3 +57,4 @@ class CartService {
 }
 
 export default new CartService();
+

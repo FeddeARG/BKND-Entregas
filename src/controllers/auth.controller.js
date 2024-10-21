@@ -1,5 +1,6 @@
 //src/controllers/auth.controller.js
 import UserService from "../services/user.service.js";
+import { LoginDTO, RegisterDTO } from "../dto/auth.dto.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import twilio from "twilio";
@@ -17,7 +18,8 @@ const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 export const loginUser = async (req, res) => {
   try {
-    const token = await UserService.login(req.body.email, req.body.password);
+    const loginDTO = new LoginDTO(req.body);
+    const token = await UserService.login(loginDTO.email, loginDTO.password);
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -33,7 +35,8 @@ export const loginUser = async (req, res) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const token = await UserService.register(req.body);
+    const registerDTO = new RegisterDTO(req.body);
+    const token = await UserService.register(registerDTO);
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -92,7 +95,6 @@ export const sendResetPassword = async (req, res) => {
       }
     }
 
-    // Redirigimos a una vista de confirmación
     res.render("resetConfirmation", { message: "Se ha enviado un enlace de recuperación a tu correo electrónico o SMS." });
   } catch (error) {
     console.error("Error al enviar el enlace de recuperación:", error);
@@ -127,7 +129,6 @@ export const resetPassword = async (req, res) => {
 
     await user.save();
 
-    // Pasamos una variable de éxito al redirigir a la vista de login
     res.render("login", { passwordResetSuccess: true });
   } catch (error) {
     console.error("Error en resetPassword:", error);

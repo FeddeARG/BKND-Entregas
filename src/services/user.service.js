@@ -2,6 +2,7 @@
 import UserDAO from "../dao/user.dao.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { CreateUserDTO, UpdateUserDTO } from "../dto/user.dto.js";
 
 class UserService {
   async login(email, password) {
@@ -36,7 +37,8 @@ class UserService {
   }
   
   async register(userData) {
-    const { email, password, phone, ...otherData } = userData;
+    const createUserDTO = new CreateUserDTO(userData);
+    const { email, phone } = createUserDTO;
 
     const existingUser = await UserDAO.getUserByEmail(email);
     if (existingUser) {
@@ -48,13 +50,11 @@ class UserService {
       throw new Error("El número de teléfono ya está registrado");
     }
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = bcrypt.hashSync(createUserDTO.password, 10);
 
     const newUser = {
-      email,
+      ...createUserDTO,
       password: hashedPassword,
-      phone,
-      ...otherData
     };
 
     const createdUser = await UserDAO.createUser(newUser);
@@ -71,7 +71,8 @@ class UserService {
   }
 
   async createUser(userData) {
-    const { email, password, ...otherData } = userData;
+    const createUserDTO = new CreateUserDTO(userData);
+    const { email, password } = createUserDTO;
 
     const existingUser = await UserDAO.getUserByEmail(email);
     if (existingUser) {
@@ -81,9 +82,8 @@ class UserService {
     const hashedPassword = bcrypt.hashSync(password, 10);
 
     const newUser = {
-      email,
+      ...createUserDTO,
       password: hashedPassword,
-      ...otherData,
     };
 
     return await UserDAO.createUser(newUser);
@@ -110,11 +110,12 @@ class UserService {
   }
 
   async updateUser(id, userData) {
+    const updateUserDTO = new UpdateUserDTO(userData);
     const user = await UserDAO.getUserById(id);
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
-    return await UserDAO.updateUser(id, userData);
+    return await UserDAO.updateUser(id, updateUserDTO);
   }
 
   async deleteUser(id) {

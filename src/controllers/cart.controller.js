@@ -1,6 +1,7 @@
 // src/controllers/cart.controller.js
 import CartService from "../services/cart.service.js";
 import Ticket from "../models/ticket.model.js";
+import { AddProductToCartDTO } from "../dto/cart.dto.js";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
@@ -15,12 +16,20 @@ const transporter = nodemailer.createTransport({
 class CartController {
   async addProductToCart(req, res) {
     try {
-      const { productId } = req.params;
-      const { quantity } = req.body;
-      await CartService.addProductToCart(req.user._id, productId, quantity);
-      res
-        .status(200)
-        .json({ status: "success", message: "Producto agregado al carrito" });
+      // Debug para ver qué datos se están recibiendo
+      console.log("Datos recibidos del frontend:", req.body);
+      console.log("Producto ID recibido en params:", req.params.productId);  // Verificamos que este valor es correcto
+
+      const addProductDTO = new AddProductToCartDTO({
+        productId: req.params.productId,  // Extraemos el productId de los params
+        quantity: req.body.quantity
+      });
+
+      // Verificamos si el ID llega al servicio correctamente
+      console.log("Producto ID enviado al servicio:", addProductDTO.productId);
+
+      await CartService.addProductToCart(req.user._id, addProductDTO.productId, addProductDTO.quantity);
+      res.status(200).json({ status: "success", message: "Producto agregado al carrito" });
     } catch (error) {
       console.error("Error al agregar producto al carrito:", error);
       res.status(400).json({ status: "error", message: error.message });
@@ -31,14 +40,8 @@ class CartController {
     try {
       const { productId } = req.params;
       const { quantity } = req.body;
-      await CartService.removeProductFromCart(
-        req.user._id,
-        productId,
-        quantity
-      );
-      res
-        .status(200)
-        .json({ status: "success", message: "Producto eliminado del carrito" });
+      await CartService.removeProductFromCart(req.user._id, productId, quantity);
+      res.status(200).json({ status: "success", message: "Producto eliminado del carrito" });
     } catch (error) {
       console.error("Error al eliminar producto del carrito:", error);
       res.status(400).json({ status: "error", message: error.message });
@@ -48,14 +51,10 @@ class CartController {
   async clearCart(req, res) {
     try {
       await CartService.clearCart(req.user._id);
-      res
-        .status(200)
-        .json({ status: "success", message: "Carrito vaciado correctamente" });
+      res.status(200).json({ status: "success", message: "Carrito vaciado correctamente" });
     } catch (error) {
       console.error("Error al vaciar el carrito:", error);
-      res
-        .status(500)
-        .json({ status: "error", message: "Error al vaciar el carrito" });
+      res.status(500).json({ status: "error", message: "Error al vaciar el carrito" });
     }
   }
 
@@ -65,9 +64,7 @@ class CartController {
       res.json({ status: "success", cart });
     } catch (error) {
       console.error("Error al obtener el carrito:", error);
-      res
-        .status(500)
-        .json({ status: "error", message: "Error al obtener el carrito" });
+      res.status(500).json({ status: "error", message: "Error al obtener el carrito" });
     }
   }
 
@@ -157,4 +154,5 @@ class CartController {
 }
 
 export default new CartController();
+
 
