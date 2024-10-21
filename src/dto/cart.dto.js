@@ -2,10 +2,7 @@
 export class AddProductToCartDTO {
   constructor({ productId, quantity }) {
     this.productId = productId;
-    this.quantity = Number(quantity);  // Convertimos a número
-
-    // Verifica si el valor de quantity es NaN
-    console.log(`Cantidad recibida en DTO: ${quantity} (convertido a: ${this.quantity})`);
+    this.quantity = Number(quantity);
 
     if (isNaN(this.quantity) || this.quantity <= 0) {
       throw new Error("La cantidad debe ser un número válido mayor a cero");

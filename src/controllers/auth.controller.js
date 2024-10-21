@@ -88,7 +88,6 @@ export const sendResetPassword = async (req, res) => {
 
       try {
         const message = await client.messages.create(smsOptions);
-        console.log("Mensaje enviado correctamente:", message.sid);
       } catch (error) {
         console.error("Error al enviar SMS:", error);
         return res.status(500).render("requestResetPassword", { error: "Error al enviar SMS." });

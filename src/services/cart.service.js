@@ -9,13 +9,10 @@ class CartService {
   }
 
   async addProductToCart(userId, productId, quantity) {
-    console.log("Product ID recibido en servicio:", productId);  // Debug para ver el ID
 
     const product = await ProductDAO.getProductById(productId);
 
-    // Verificar si se encuentra el producto
     if (!product) {
-      console.error("Producto no encontrado con el ID:", productId);
       throw new Error("Producto no encontrado");
     }
 

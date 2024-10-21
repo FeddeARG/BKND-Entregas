@@ -60,13 +60,10 @@ class CartDAO {
   async clearCart(userId) {
     const cart = await this.getCartByUserId(userId);
     if (cart) {
-      console.log("Carrito encontrado, vaciando productos para el usuario:", userId);
       cart.products = [];
       const savedCart = await cart.save();
-      console.log("Carrito vaciado y guardado:", savedCart);
       return savedCart;
     } else {
-      console.log("No se encontró carrito para el usuario:", userId);
     }
     return null;
   }

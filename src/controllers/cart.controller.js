@@ -16,17 +16,10 @@ const transporter = nodemailer.createTransport({
 class CartController {
   async addProductToCart(req, res) {
     try {
-      // Debug para ver qué datos se están recibiendo
-      console.log("Datos recibidos del frontend:", req.body);
-      console.log("Producto ID recibido en params:", req.params.productId);  // Verificamos que este valor es correcto
-
       const addProductDTO = new AddProductToCartDTO({
-        productId: req.params.productId,  // Extraemos el productId de los params
+        productId: req.params.productId,
         quantity: req.body.quantity
       });
-
-      // Verificamos si el ID llega al servicio correctamente
-      console.log("Producto ID enviado al servicio:", addProductDTO.productId);
 
       await CartService.addProductToCart(req.user._id, addProductDTO.productId, addProductDTO.quantity);
       res.status(200).json({ status: "success", message: "Producto agregado al carrito" });
